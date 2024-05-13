@@ -6,22 +6,12 @@ app = Flask(__name__)
 navn = "Gjøvik restauranter"
 
 
-brukere = ["Per","Ola", "Abdi", "Sander", "Michel"]
-
-
-con = sqlite3.connect("database.db", check_same_thread=False)
-cur = con.cursor()
-
-cur.execute(""" CREATE TABLE
-            IF NOT EXISTS
-            brukere(ID integer PRIMARY KEY, 
-            fornavn text,
-            etternavn text,
-            telefon integer,
-            bilde blob);""")
 
 
 
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
