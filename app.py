@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 import requests
 import sqlite3
 
@@ -36,6 +36,22 @@ cur.execute("""CREATE TABLE IF NOT EXISTS users (
 con.commit()
 
 
-@app.route("/")
-def get_restaurant():
-    return 2
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.json
+    username = data.get("username")
+    password = data.get("password")
+    
+    # Query the database to check if the user exists and the password is correct
+    # Replace this with your actual database query
+    user = cur.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password)).fetchone()
+    print(user)
+    if user:
+        return jsonify({"message": "Login successful", "username": username}), 200
+    else:
+        return jsonify({"message": "Invalid credentials"}), 401
+
+
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5020)
