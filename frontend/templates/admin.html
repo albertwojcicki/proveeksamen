@@ -2,4 +2,19 @@
 {% block content %}
 admin
 {{username}}
+{{user_id}}
+<a href="/">Hjemside</a>
+<form action="{{ url_for('add_meals', user_id = user_id) }}" method="post">
+    <input type="text" name="meal_name" placeholder="Meal name">
+    <input type="integer" name="meal_price" placeholder="Meal price">
+    <input type="text" name="meal_description" placeholder="description">
+    <input type="file">
+    <input type="submit">
+    
+</form>
+
+
+
+
+
 {% endblock %}

@@ -6,7 +6,7 @@ cur.execute("""CREATE TABLE IF NOT EXISTS restaurants (
                 restaurant_name TEXT,
                 owner_id INTEGER,
                 restaurant_image BLOB,
-                FOREIGN KEY (owner_id) REFERENCES users(id)
+                FOREIGN KEY (owner_id) REFERENCES users(user_id)
             );""")
 con.commit()
 

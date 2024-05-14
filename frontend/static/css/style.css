@@ -13,3 +13,27 @@ header {
     padding-left: 20px;
     font-size: 20px
 }
+
+.restaurant-images {
+    width: 200px;
+}
+
+.div-restaurants {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.div-meal {
+    display: flex;
+    border: 2px solid black;
+    flex-direction: column;
+    width: 15%;
+    height: 100px;
+}
+
+.div-meal-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    flex-direction: row;
+}

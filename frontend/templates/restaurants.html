@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<a href="/">Hjemside</a>
+<img src="http://127.0.0.1:5020/get_image/{{ restaurant_image }}" class="restaurant-images" >
+<div class="div-meal-container">
+    {% for meal in restaurant_data %}
+    <div class="div-meal">
+        <p>Navn: {{ meal.meal_name }}</p>
+        <p>ID: {{ meal.restaurant_id }}</p>
+        <p>Pris: {{ meal.meal_price }}</p>
+        <p>Beskrivelse: {{ meal.meal_description }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
