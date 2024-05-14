@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-<form action="{{ url_for('update_meal', meal_id=meal_data.meal_id) }}" method="POST">
+<form action="{{ url_for('update_meal', meal_id=meal_id) }}" method="POST">
 
     <label for="meal_name">Meal Name:</label>
     <input type="text" id="meal_name" name="meal_name" value="{{ meal_data.meal_name }}"><br><br>

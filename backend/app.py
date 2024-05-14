@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory, json, redirect
+from flask import Flask, render_template, request, jsonify, send_from_directory, json, redirect, session
 import json
 import requests
 import sqlite3
@@ -12,7 +12,7 @@ app = Flask(__name__)
 # BYTT PATH PÅ DATABASEN    
 con = sqlite3.connect("database.db", check_same_thread=False)
 cur = con.cursor()
-
+app.secret_key = 'your_secret_key'
 
 
 @app.route("/login", methods=["POST"])
@@ -20,12 +20,10 @@ def login():
     data = request.json
     username = data.get("username")
     password = data.get("password")
-    
-    # Query the database to check if the user exists and the password is correct
-    # Replace this with your actual database query
     user = cur.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password)).fetchone()
     print(user)
     if user:
+        session['username'] = username
         return jsonify({"message": "Login successful", "username": username}), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
@@ -43,12 +41,10 @@ def add_meals():
         meal_description = request.form.get("meal_description")
         meal_image = request.files["meal_image"]
         print(meal_image)
-        # Save the uploaded image to the static/bilder directory
         image_name = meal_image.filename
         image_path = os.path.join("static", "bilder", image_name)
         meal_image.save(image_path)
 
-        # Insert meal data into the database
         cur.execute("INSERT INTO meals (meal_name, meal_price, meal_desc, restaurant_id, meal_image) VALUES (?, ?, ?, ?, ?)",
                     (meal_name, meal_price, meal_description, user_id, image_name))
         con.commit()
@@ -84,8 +80,6 @@ def get_restaurant_data():
 def get_restaurants():
     cur.execute("SELECT * FROM restaurants")
     data = cur.fetchall()
-
-    # Convert fetched data into a list of dictionaries
     restaurants = []
     for row in data:
         restaurant = {
@@ -93,11 +87,8 @@ def get_restaurants():
             "restaurant_name": row[1],
             "owner_id": row[2],
             "restaurant_image": row[3]
-            # Add more fields as needed
         }
         restaurants.append(restaurant)
-
-    # Return the data to the frontend as JSON
     return jsonify(restaurants)
 
 @app.route("/edit_meal", methods=["POST"])
@@ -119,7 +110,7 @@ def edit_meal():
 @app.route("/get_data_edit", methods=["GET", "POST"])
 def get_data_edit():
     meal_id = request.get_json()["meal_id"]
-    cur.execute("SELECT * FROM meals WHERE meal_id = ?", (meal_id))
+    cur.execute("SELECT * FROM meals WHERE meal_id = ?", (meal_id,))
     data = cur.fetchall()
     mealsList = []
     for row in data:
@@ -132,34 +123,28 @@ def get_data_edit():
         mealsList.append(meals)
     return jsonify(mealsList)
 
-@app.route("/update_meal/<meal_id>", methods=["POST"])
+@app.route("/update_meal/<meal_id>", methods=["GET","POST"])
 def update_meal(meal_id):
-    # Get data from the form submission
-    meal_name = request.form.get("meal_name")
-    meal_price = request.form.get("meal_price")
-    meal_description = request.form.get("meal_description")
-
-    # Update the meal data in the database
-    cur.execute("UPDATE meals SET meal_name = ?, meal_price = ?, meal_description = ? WHERE meal_id = ?",
+    json_data = json.loads(request.json)
+    meal_name = json_data["meal_name"]
+    meal_price = json_data["meal_price"]
+    meal_description = json_data["meal_description"]
+    cur.execute("UPDATE meals SET meal_name = ?, meal_price = ?, meal_desc = ? WHERE meal_id = ?",
                 (meal_name, meal_price, meal_description, meal_id))
     con.commit()
+    return "status_code", 200
 
-    # Redirect to some page after successful update
-    return redirect("/admin")
-
-@app.route("/delete_meal", methods=["DELETE"])
-def delete_meal():
-    meal_id = request.get_json()["meal_id"]
-    cur.execute("DELETE FROM meals WHERE meal_id = ?", (meal_id))
+@app.route("/delete_meal/<meal_id>", methods=["DELETE"])
+def delete_meal(meal_id):
+    cur.execute("DELETE FROM meals WHERE meal_id = ?", (meal_id,))
     con.commit()
-    return "success", 200
+    return "Meal deleted successfully", 200
 
 @app.route("/get_user_id", methods=["GET"])
 def get_user_id():
     username = request.get_json()["username"]
     cur.execute("SELECT user_id FROM users WHERE username = ?", (username,))
     user_id = cur.fetchone()
-
     return {"user_id": user_id[0]}
 
 if __name__ == "__main__":
