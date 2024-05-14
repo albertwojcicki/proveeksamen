@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="{{ url_for('add_meals', user_id=user_id) }}" method="post" enctype="multipart/form-data">
+    <label for="meal_name">Meal Name:</label>
+    <input type="text" id="meal_name" name="meal_name" required><br>
+    <label for="meal_price">Meal Price:</label>
+    <input type="number" id="meal_price" name="meal_price" required><br>
+    <label for="meal_description">Description:</label>
+    <textarea id="meal_description" name="meal_description" required></textarea><br>
+    <label for="meal_image">Image:</label>
+    <input type="file" id="meal_image" name="meal_image" accept="image/*" required><br>
+    <input type="submit" value="Submit">
+</form>
+{% endblock %}

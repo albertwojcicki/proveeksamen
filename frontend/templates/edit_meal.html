@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Meal Names</h1>
+    <ul>
+        <div class="div-edit-container">
+        {% for meal in mealToEdit %}
+        <div class="div-edit-meals">
+            <li>{{ meal.meal_name }}</li>
+            <li>{{ meal.meal_price }}</li>
+            <li>{{ meal.meal_description }}</li>
+            <form action="{{ url_for('edit_meals', meal_id = meal.meal_id )}}" method = "post">
+                <input type="submit" value="Endre">
+            </form>
+            <form action="{{ url_for('delete_meal', meal_id = meal.meal_id )}}">
+                <input type="submit" value="delete">
+            </form>
+        </div>
+        {% endfor %}</div>
+    </ul>
+{% endblock %}  

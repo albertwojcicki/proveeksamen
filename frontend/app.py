@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, json
 import sqlite3
 import requests
 
@@ -55,7 +55,10 @@ def admin(username):
         return render_template("admin.html", username=username, user_id = user_id)
     else:
         return redirect("/login")
-
+    
+@app.route("/upload_form/<user_id>")
+def upload_form(user_id):
+    return render_template("upload_form.html", user_id = user_id)
 
 @app.route("/add_meals/<user_id>", methods=["POST", "GET"])
 def add_meals(user_id):
@@ -63,9 +66,65 @@ def add_meals(user_id):
         meal_name = request.form.get("meal_name")
         meal_price = request.form.get("meal_price")
         meal_description = request.form.get("meal_description")
-        requests.post("http://127.0.0.1:5020/add_meals", json={"user_id": user_id,"meal_name": meal_name, "meal_price": meal_price, "meal_description": meal_description})
         
-        return render_template("admin.html")
+        # Get the image file from the form
+        meal_image = request.files["meal_image"]
+
+        # Create a dictionary with all the meal data
+        meal_data = {
+            "user_id": user_id,
+            "meal_name": meal_name,
+            "meal_price": meal_price,
+            "meal_description": meal_description
+        }
+        print(meal_image)
+        # Make a POST request to the backend to add the meal
+        files = {"meal_image": meal_image}
+        response = requests.post("http://127.0.0.1:5020/add_meals", data=meal_data, files=files)
+        
+        # Handle the response as needed
+        if response.status_code == 200:
+            return render_template("admin.html")
+        else:
+            return "Error adding meal"
+
+    return render_template("admin.html")
+
+@app.route("/edit_meals/<meal_id>", methods=["POST", "GET"])
+def edit_meals(meal_id):
+    get_data = requests.get("http://127.0.0.1:5020/get_data_edit", json={"meal_id": meal_id}).json()
+    print(get_data)
+    return render_template("edit_page.html", meal_data = get_data)
+
+@app.route("/update_meal/<meal_id>", methods = ["POST", "GET"])
+def update_meal(meal_id):
+    meal_name = request.form.get("meal_name")
+    meal_price = request.form.get("meal_price")
+    meal_description = request.form.get("meal_description")
+    meal_data = {
+        "meal_name": meal_name,
+        "meal_price": meal_price,
+        "meal_description": meal_description,
+        "meal_id": meal_id
+            }
+    json_data = json.dumps(meal_data)
+    response = requests.post("http://127.0.0.1:5020/update_meal/" + meal_id, json=json_data)
+    if response.status_code == 200:
+        return render_template("index.html")
+    else:
+        print("Error sending data:", response.text)
+
+@app.route("/delete_meal/<meal_id>", methods=["POST"])
+def delete_meal(meal_id):
+    meal_id = requests.delete("http/127.0.0.1:5020/delete_meal", json={"meal_id": meal_id})
+    return render_template("edit_meal.html")
+
+@app.route("/edit_meal/<user_id>")
+def edit_meal(user_id):
+    mealToEdit = requests.post("http://127.0.0.1:5020/edit_meal", json={"user_id": user_id}).json()
+    print(mealToEdit)
+
+    return render_template("edit_meal.html", mealToEdit = mealToEdit)
 
 if __name__ == "__main__":
     app.run(debug=True)

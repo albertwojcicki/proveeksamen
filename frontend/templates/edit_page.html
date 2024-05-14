@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="{{ url_for('update_meal', meal_id=meal_data.meal_id) }}" method="POST">
+
+    <label for="meal_name">Meal Name:</label>
+    <input type="text" id="meal_name" name="meal_name" value="{{ meal_data.meal_name }}"><br><br>
+    
+    <label for="meal_price">Meal Price:</label>
+    <input type="text" id="meal_price" name="meal_price" value="{{ meal_data.meal_price }}"><br><br>
+    
+    <label for="meal_description">Meal Description:</label><br>
+    <textarea id="meal_description" name="meal_description">{{ meal_data.meal_description }}</textarea><br><br>
+    
+    <input type="submit" value="Update">
+</form>
+{% endblock %}

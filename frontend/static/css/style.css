@@ -37,3 +37,18 @@ header {
     justify-content: space-evenly;
     flex-direction: row;
 }
+
+.div-edit-meals {
+    border: 2px solid black;
+    width: 15%;
+    display: flex;
+    justify-content: space-evenly;
+    height: 100px;
+}
+
+.div-edit-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly
+    ;
+}

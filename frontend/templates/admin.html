@@ -4,13 +4,11 @@ admin
 {{username}}
 {{user_id}}
 <a href="/">Hjemside</a>
-<form action="{{ url_for('add_meals', user_id = user_id) }}" method="post">
-    <input type="text" name="meal_name" placeholder="Meal name">
-    <input type="integer" name="meal_price" placeholder="Meal price">
-    <input type="text" name="meal_description" placeholder="description">
-    <input type="file">
-    <input type="submit">
-    
+<form action="{{ url_for('upload_form', user_id = user_id)}}">
+    <input type="submit" value="Legg til ">
+</form>
+<form action="{{ url_for('edit_meal', user_id = user_id)}}">
+    <input type="submit" value="Endre rett ">
 </form>
 
 
