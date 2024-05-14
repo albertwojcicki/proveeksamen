@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 import requests
 import sqlite3
+
 
 
 app = Flask(__name__)
@@ -8,32 +9,6 @@ app = Flask(__name__)
 con = sqlite3.connect("database.db", check_same_thread=False)
 cur = con.cursor()
 
-cur.execute("""CREATE TABLE IF NOT EXISTS restaurants (
-                restaurant_id INTEGER PRIMARY KEY, 
-                restaurant_name TEXT,
-                owner_id INTEGER,
-                restaurant_image BLOB,
-                FOREIGN KEY (owner_id) REFERENCES users(id)
-            );""")
-con.commit()
-
-cur.execute("""CREATE TABLE IF NOT EXISTS meals (
-                meal_id INTEGER PRIMARY KEY, 
-                restaurant_id INTEGER,
-                meal_name TEXT,
-                meal_price INTEGER,
-                meal_desc TEXT,
-                meal_image BLOB,
-                FOREIGN KEY (restaurant_id) REFERENCES restaurants(restaurant_id)
-            );""")
-con.commit()
-cur.execute("""CREATE TABLE IF NOT EXISTS users (
-                user_id INTEGER PRIMARY KEY, 
-                username TEXT,
-                password TEXT 
-            );""")
-
-con.commit()
 
 
 @app.route("/login", methods=["POST"])
@@ -50,8 +25,31 @@ def login():
         return jsonify({"message": "Login successful", "username": username}), 200
     else:
         return jsonify({"message": "Invalid credentials"}), 401
+    
+@app.route("/get_image/<image_name>", methods = ["GET"])
+def get_image(image_name):
+    
+    return send_from_directory("Q://proveeksamen flask/frontend/static/bilder", image_name)
 
+@app.route("/get_restaurants")
+def get_restaurants():
+    cur.execute("SELECT * FROM restaurants")
+    data = cur.fetchall()
 
+    # Convert fetched data into a list of dictionaries
+    restaurants = []
+    for row in data:
+        restaurant = {
+            "restaurant_id": row[0],
+            "restaurant_name": row[1],
+            "owner_id": row[2],
+            "restaurant_image": row[3]
+            # Add more fields as needed
+        }
+        restaurants.append(restaurant)
+
+    # Return the data to the frontend as JSON
+    return jsonify(restaurants)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5020)

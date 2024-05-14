@@ -3,5 +3,12 @@
 {% block content %}
 <a href="login">Logg Inn</a>
 hello
-
-{% endblock %}
+ {% for i in restaurants %}
+<p>{{i.restaurant_name}}</p>
+<img src= "http://127.0.0.1:5020/get_image/{{ i.restaurant_image }}" >
+<!-- <form action="{{ url_for('restaurants', owner_id=i.owner_id)}}" method="post"> 
+<input type="submit" name="" id="">
+ </form> -->
+{{i.owner_id}}
+{% endfor %}
+ {% endblock %}

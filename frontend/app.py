@@ -12,7 +12,14 @@ app.secret_key = 'your_secret_key'
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    response = requests.get("http://127.0.0.1:5020/get_restaurants")
+    if response.status_code == 200:
+        restaurants = response.json()
+       
+        return render_template("index.html", restaurants=restaurants)
+    else:
+        return "Error fetching restaurants from the backend"
+    
 
 
 # Assuming you have a form in your template named "login_form"
