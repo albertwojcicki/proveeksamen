@@ -9,6 +9,7 @@
         <p>ID: {{ meal.restaurant_id }}</p>
         <p>Pris: {{ meal.meal_price }}</p>
         <p>Beskrivelse: {{ meal.meal_description }}</p>
+        <img class="meny-bilde" src="http://127.0.0.1:5020/get_image_meal/{{meal.meal_image}}" alt="bilde av {{meal.meal_image}}">
     </div>
     {% endfor %}
 </div>

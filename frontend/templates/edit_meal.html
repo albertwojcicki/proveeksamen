@@ -9,6 +9,7 @@
             <li>{{ meal.meal_name }}</li>
             <li>{{ meal.meal_price }}</li>
             <li>{{ meal.meal_description }}</li>
+            <img class="meny-bilde" src="http://127.0.0.1:5020/get_image_meal/{{meal.meal_image}}" alt="bilde av {{meal.meal_image}}">
             <form action="{{ url_for('edit_meals', meal_id = meal.meal_id )}}" method = "post">
                 <input type="submit" value="Endre">
             </form>

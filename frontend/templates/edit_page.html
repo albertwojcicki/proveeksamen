@@ -3,14 +3,22 @@
 <form action="{{ url_for('update_meal', meal_id=meal_id) }}" method="POST">
 
     <label for="meal_name">Meal Name:</label>
-    <input type="text" id="meal_name" name="meal_name" value="{{ meal_data.meal_name }}"><br><br>
+    <input type="text" id="meal_name" name="meal_name" value="{{ meal_name }}"><br><br>
     
     <label for="meal_price">Meal Price:</label>
-    <input type="text" id="meal_price" name="meal_price" value="{{ meal_data.meal_price }}"><br><br>
+    <input type="text" id="meal_price" name="meal_price" value="{{ meal_price }}"><br><br>
     
     <label for="meal_description">Meal Description:</label><br>
-    <textarea id="meal_description" name="meal_description">{{ meal_data.meal_description }}</textarea><br><br>
+    <textarea id="meal_description" name="meal_description">{{ meal_description }}</textarea><br><br>
+
     
     <input type="submit" value="Update">
+</form>
+
+<form action="http://127.0.0.1:5020/post_image/{{meal_id}}"  method="POST" enctype="multipart/form-data"> 
+
+<img class="meny-bilde" src="http://127.0.0.1:5020/get_image_meal/{{meal_image}}" alt="bilde av {{meal_image}}">
+<input type="file" name="meal_image_edit">
+<input type="submit">
 </form>
 {% endblock %}

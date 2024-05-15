@@ -32,7 +32,20 @@ def login():
 def get_image(image_name):
     return send_from_directory("static/bilder", image_name)
 
+@app.route('/get_image_meal/<image_name>', methods = ["GET"])
+def get_image_meal(image_name):
+    return send_from_directory('C:\\wamp64\\www\\proveeksamen\\backend\\static\\bilder\\',  image_name)
 
+@app.route('/post_image/<meal_id>/', methods=['POST'])
+def upload_image(meal_id):
+    new_image_file = request.files['meal_image_edit']
+    cur.execute("SELECT meal_image from meals WHERE meal_id = ?", (meal_id,))
+    old_image_file = cur.fetchone()[0]
+    os.remove('C:\\wamp64\\www\\proveeksamen\\backend\\static\\bilder\\' + old_image_file)
+    new_image_file.save('C:\\wamp64\\www\\proveeksamen\\backend\\static\\bilder\\' + new_image_file.filename)
+    cur.execute("UPDATE meals SET meal_image = ? WHERE meal_id = ?", (new_image_file.filename, meal_id))
+    con.commit()
+    return redirect('http://127.0.0.1:5000')
 
 
 @app.route("/add_meals", methods=["POST"])
@@ -67,7 +80,8 @@ def get_restaurant_data():
                     "restaurant_id": meal[1],
                     "meal_name": meal[2],
                     "meal_price": meal[3],
-                    "meal_description": meal[4]
+                    "meal_description": meal[4],
+                    "meal_image": meal[5]
                 }
                 meal_list.append(meal_data)
             return jsonify(meal_list)
