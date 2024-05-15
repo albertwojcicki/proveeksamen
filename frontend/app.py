@@ -93,9 +93,10 @@ def add_meals(user_id):
             "user_id": user_id,
             "meal_name": meal_name,
             "meal_price": meal_price,
-            "meal_description": meal_description
+            "meal_description": meal_description,
+            "meal_image": meal_image.filename 
         }
-        print(meal_image)
+        print(meal_image.filename)
         files = {"meal_image": meal_image}
         response = requests.post("http://127.0.0.1:5020/add_meals", data=meal_data, files=files)
         

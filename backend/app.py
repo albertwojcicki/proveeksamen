@@ -5,7 +5,7 @@ import sqlite3
 import os
 from werkzeug.utils import secure_filename
 from datetime import datetime
-
+workingdir = os.getcwd()
 
 
 app = Flask(__name__)
@@ -32,6 +32,9 @@ def login():
 def get_image(image_name):
     return send_from_directory("static/bilder", image_name)
 
+
+
+
 @app.route("/add_meals", methods=["POST"])
 def add_meals():
     if request.method == "POST":
@@ -39,17 +42,15 @@ def add_meals():
         meal_name = request.form.get("meal_name")
         meal_price = request.form.get("meal_price")
         meal_description = request.form.get("meal_description")
+        meal_image_name = request.form.get("meal_image")
         meal_image = request.files["meal_image"]
-        print(meal_image)
-        image_name = meal_image.filename
-        image_path = os.path.join("static", "bilder", image_name)
-        meal_image.save(image_path)
-
+        meal_image.save(workingdir + "\\static\\bilder\\" + meal_image_name)
+        print(meal_image_name)
         cur.execute("INSERT INTO meals (meal_name, meal_price, meal_desc, restaurant_id, meal_image) VALUES (?, ?, ?, ?, ?)",
-                    (meal_name, meal_price, meal_description, user_id, image_name))
+                    (meal_name, meal_price, meal_description, user_id, meal_image_name))
         con.commit()
 
-        return jsonify({"message": "Meal added successfully", "meal_image_path": image_path})
+        return jsonify({"message": "Meal added successfully", "meal_image_path": 'C:\\wamp64\\www\\proveeksamen\\backend\\static\\bilder\\' + meal_image_name})
 
 @app.route("/get_restaurant_data", methods=["GET", "POST"])
 def get_restaurant_data():
