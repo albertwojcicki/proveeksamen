@@ -60,6 +60,8 @@ def login():
     if session.get("username") != "None":
         username = session.get("username")
         return redirect(f"/admin/{username}")
+    else:
+        return render_template("login.html")
 
     return render_template("login.html", error=None)
 

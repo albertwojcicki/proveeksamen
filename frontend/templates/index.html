@@ -9,9 +9,9 @@
 <p>{{i.restaurant_name}}</p>
 <img src= "http://127.0.0.1:5020/get_image/{{ i.restaurant_image }}" class="restaurant-images" >
 <form action="{{ url_for('restaurants', restaurant_id=i.restaurant_id)}}" method="post"> 
-<input type="submit" name="" id="">
+<input type="submit" name="" id="" value="Se retter">
  </form>
-{{i.owner_id}}
+
 </div>
 {% endfor %}
 </div>

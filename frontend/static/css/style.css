@@ -52,3 +52,299 @@ header {
     justify-content: space-evenly
     ;
 }
+
+
+.edit-button {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    padding: 12px 24px; /* Padding for the button */
+    font-size: 16px; /* Font size */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.edit-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+.edit-button:active {
+    background-color: #3e8e41; /* Even darker green when clicked */
+}
+
+.edit-button:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 0 3px rgba(72, 180, 97, 0.5); /* Custom focus outline */
+}
+.delete-button {
+    background-color: #f44336; /* Red background */
+    color: white; /* White text */
+    padding: 12px 24px; /* Padding for the button */
+    font-size: 16px; /* Font size */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.delete-button:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+}
+
+.delete-button:active {
+    background-color: #b71c1c; /* Even darker red when clicked */
+}
+
+.delete-button:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.5); /* Custom focus outline */
+}
+
+.div-admin-container {
+    display: flex;
+    width: 100%;
+    padding-top: 30px;
+    justify-content: space-evenly;
+
+}
+
+
+.div-admin-info {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin: 20px 0;
+}
+
+.div-edit-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    padding: 10px;
+    max-width: 800px;
+}
+
+.div-edit-meals {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.div-edit-meals li {
+    list-style: none;
+    margin: 5px 0;
+}
+
+.meny-bilde {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin: 20px 0;
+}
+
+form {
+    background-color: white;
+    border-radius: 8px;
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 600px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+input[type="submit"] {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    padding: 12px 24px; /* Padding for the button */
+    font-size: 16px; /* Font size */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+input[type="submit"]:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+input[type="submit"]:active {
+    background-color: #3e8e41; /* Even darker green when clicked */
+}
+
+input[type="submit"]:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 0 3px rgba(72, 180, 97, 0.5); /* Custom focus outline */
+}
+
+/* .meny-bilde {
+    max-width: 100%;
+    border-radius: 8px;
+    margin: 20px 0;
+} */
+
+.file-input {
+    display: block;
+    margin-bottom: 20px;
+}
+
+.update-button {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    padding: 10px 20px; /* Padding for the button */
+    font-size: 16px; /* Font size */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.update-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+.update-button:active {
+    background-color: #3e8e41; /* Even darker green when clicked */
+}
+
+.update-button:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 0 3px rgba(72, 180, 97, 0.5); /* Custom focus outline */
+}
+
+.upload-button {
+    background-color: #f44336; /* Red background */
+    color: white; /* White text */
+    padding: 10px 20px; /* Padding for the button */
+    font-size: 16px; /* Font size */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.upload-button:hover {
+    background-color: #d32f2f; /* Darker red on hover */
+}
+
+.upload-button:active {
+    background-color: #b71c1c; /* Even darker red when clicked */
+}
+
+.upload-button:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.5); /* Custom focus outline */
+}
+
+
+.div-restaurants {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px;
+}
+
+.div-each-restaurant {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    padding: 20px;
+    width: 300px;
+    text-align: center;
+}
+
+.restaurant-name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.restaurant-images {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+
+.view-button {
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    padding: 10px 20px; /* Padding for the button */
+    font-size: 16px; /* Font size */
+    border: none; /* Remove border */
+    border-radius: 4px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.view-button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+.view-button:active {
+    background-color: #3e8e41; /* Even darker green when clicked */
+}
+
+.view-button:focus {
+    outline: none; /* Remove default focus outline */
+    box-shadow: 0 0 0 3px rgba(72, 180, 97, 0.5); /* Custom focus outline */
+}
+
+.owner-id {
+    font-size: 14px;
+    color: #777;
+    margin-top: 10px;
+}

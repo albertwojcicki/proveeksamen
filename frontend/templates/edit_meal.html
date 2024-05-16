@@ -1,22 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Meal Names</h1>
-    <ul>
-        <div class="div-edit-container">
+<h1>Meal Names</h1>
+<ul>
+    <div class="div-edit-container">
         {% for meal in mealToEdit %}
         <div class="div-edit-meals">
-            <li>{{ meal.meal_name }}</li>
-            <li>{{ meal.meal_price }}</li>
-            <li>{{ meal.meal_description }}</li>
+            <li class="meal-name">{{ meal.meal_name }}</li>
+            <li class="meal-price">{{ meal.meal_price }}</li>
+            <li class="meal-description">{{ meal.meal_description }}</li>
             <img class="meny-bilde" src="http://127.0.0.1:5020/get_image_meal/{{meal.meal_image}}" alt="bilde av {{meal.meal_image}}">
-            <form action="{{ url_for('edit_meals', meal_id = meal.meal_id )}}" method = "post">
-                <input type="submit" value="Endre">
+            <form action="{{ url_for('edit_meals', meal_id = meal.meal_id )}}" method="post">
+                <input type="submit" value="Endre" class="edit-button">
             </form>
             <form action="{{ url_for('delete_meal', meal_id=meal.meal_id, user_id = user_id) }}" method="POST">
-                <input type="submit" value="Delete">
+                <input type="submit" value="Delete" class="delete-button">
             </form>
         </div>
-        {% endfor %}</div>
-    </ul>
+        {% endfor %}
+    </div>
+</ul>
+
 {% endblock %}  
