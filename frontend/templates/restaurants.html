@@ -2,18 +2,20 @@
 {% block content %}
 <a href="/">Hjemside</a>
 
-
-<div class="div-meal-container">
+<div class="meal-grid">
     {% for meal in restaurant_data %}
-    <div class="div-meal">
+    <div class="meal-item">
         <p>Navn: {{ meal.meal_name }}</p>
-        <p>ID: {{ meal.restaurant_id }}</p>
+     
         <p>Pris: {{ meal.meal_price }}</p>
         <p>Beskrivelse: {{ meal.meal_description }}</p>
-        <img class="meny-bilde" src="http://127.0.0.1:5020/get_image_meal/{{meal.meal_image}}" alt="bilde av {{meal.meal_image}}">
+        <img class="meal-image" src="http://127.0.0.1:5020/get_image_meal/{{meal.meal_image}}" alt="bilde av {{meal.meal_image}}">
         <form action="{{ url_for('add_to_basket', meal_id=meal.meal_id) }}" method="post">
             <input type="hidden" name="quantity" value="1">
-            <input type="submit" class="edit-button">
+            <input type="submit" class="edit-button" value="Add to Cart">
         </form>
-        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+
 {% endblock %}

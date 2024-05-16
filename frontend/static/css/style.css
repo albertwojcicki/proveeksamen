@@ -31,9 +31,30 @@ header {
     height: 100px;
 }
 
+.meal-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Creates 4 columns */
+    gap: 20px; /* Adjust the gap between items */
+}
+
+/* Style for each meal item */
+.meal-item {
+    border: 1px solid #ddd;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Style for meal images */
+.meal-image {
+    max-width: 100%;
+    height: auto;
+}
+
 .div-meal-container {
     display: flex;
     width: 100%;
+    border: 2px solid red;
+    height: 100vh;
     justify-content: space-evenly;
     flex-direction: row;
 }
@@ -170,9 +191,11 @@ h1 {
     color: #333;
     margin: 20px 0;
 }
-
+/* td {
+   border: 1px solid black; 
+} */
 form {
-    background-color: white;
+    /* border: 1px solid black; */
     border-radius: 8px;
     /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
     margin: 20px auto;

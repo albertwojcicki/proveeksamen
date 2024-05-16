@@ -21,6 +21,7 @@ def check_login():
         print("logget inn", session.get("username"))
     if 'user_id' not in session:
         session['user_id'] = None
+        
    
 
 @app.route("/")
