@@ -78,11 +78,8 @@ def login_bruker():
         "password": password
     }
     response = requests.post("http://127.0.0.1:5020/login_bruker", json=data)
-    if response.status_code == 200:
-        return render_template("login_bruker.html")  
-    else:
-        return "Error logging in user"  
-    return render_template("login_bruker.html")
+
+    return redirect(url_for("index"))
 
 @app.route("/registrer_bruker", methods=["POST", "GET"])
 def registrer_bruker():

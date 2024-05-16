@@ -57,9 +57,22 @@ def registrer_bruker():
     return  "succesfully registered user"
 
 
-@app.route("login_bruker", methods=["POST", "GET"])
+@app.route("/login_bruker", methods=["POST", "GET"])
 def login_bruker():
+    data = request.json
+    email = data.get("email")
+    password = data.get("password")
+    users = [{"email": email, "password": password}]
+    # Check if the provided email and password match any user in the users list
+    user = next((user for user in users if user["email"] == email and user["password"] == password), None)
     
+    if user:
+        # Successful login
+        return jsonify({"message": "Login successful"}), 200
+    else:
+        # Invalid credentials
+        return jsonify({"message": "Invalid email or password"}), 401
+
 
 @app.route("/add_meals", methods=["POST"])
 def add_meals():
