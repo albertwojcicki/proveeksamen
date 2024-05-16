@@ -31,7 +31,15 @@ cur.execute("""CREATE TABLE IF NOT EXISTS customers (
                 email TEXT,
                 password TEXT 
             );""")
-
+con.commit()
+cur.execute("""CREATE TABLE IF NOT EXISTS basket (
+                user_id INTEGER, 
+                meal_id INTEGER,
+                number_of_meals INTEGER,
+                bought INTEGER DEFAULT 0,
+            purchase_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES customers(user_id)
+            );""")
 con.commit()
 cur.execute("INSERT INTO users (username, password) VALUES ('Albert', 'passord')")
 cur.execute("INSERT INTO users (username, password) VALUES ('Kjell', 'passord')")

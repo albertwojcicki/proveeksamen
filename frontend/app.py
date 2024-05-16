@@ -19,6 +19,8 @@ def check_login():
         appHasRunBefore = True
     if session.get("username") != "None":
         print("logget inn", session.get("username"))
+    if 'user_id' not in session:
+        session['user_id'] = None
    
 
 @app.route("/")
@@ -33,6 +35,10 @@ def index():
 @app.route("/restaurants/<restaurant_id>", methods=["GET", "POST"])
 def restaurants(restaurant_id):
     if request.method == "POST":
+        # Check if the user is logged in
+        if session['user_id'] is None:
+            return redirect(url_for('login_bruker_side'))  # Redirect to login page if user is not logged in
+        
         response = requests.post("http://127.0.0.1:5020/get_restaurant_data", json={"restaurant_id": restaurant_id})
         if response.status_code == 200:
             restaurant_data = response.json()
@@ -41,6 +47,13 @@ def restaurants(restaurant_id):
             return "Error fetching restaurant data from the backend"
     else:
         return "Method not allowed", 405
+
+
+@app.route("/add_to_basket/<meal_id>", methods=["POST", "GET"])
+def add_to_basket(meal_id):
+    if session['user_id'] is None:
+        return redirect(url_for('login_bruker_side')) 
+    
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -77,6 +90,7 @@ def login_bruker():
     response = requests.post("http://127.0.0.1:5020/login_bruker", json=data)
      
     if response.status_code == 200:
+            session['email'] = email
             return redirect(url_for("index"))  # Redirect to the index page after successful login
     else:
             # The email or password is incorrect
