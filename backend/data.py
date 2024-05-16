@@ -26,6 +26,12 @@ cur.execute("""CREATE TABLE IF NOT EXISTS users (
                 password TEXT 
             );""")
 
+cur.execute("""CREATE TABLE IF NOT EXISTS customers (
+                user_id INTEGER PRIMARY KEY, 
+                email TEXT,
+                password TEXT 
+            );""")
+
 con.commit()
 cur.execute("INSERT INTO users (username, password) VALUES ('Albert', 'passord')")
 cur.execute("INSERT INTO users (username, password) VALUES ('Kjell', 'passord')")

@@ -47,6 +47,19 @@ def upload_image(meal_id):
     con.commit()
     return redirect('http://127.0.0.1:5000')
 
+@app.route("/registrer_bruker", methods=["POST", "GET"])
+def registrer_bruker():
+    data = request.json
+    email = data.get("email")
+    password = data.get("password")
+    cur.execute("INSERT INTO customers (email, password) VALUES (?, ?)", (email, password))
+    con.commit()
+    return  "succesfully registered user"
+
+
+@app.route("login_bruker", methods=["POST", "GET"])
+def login_bruker():
+    
 
 @app.route("/add_meals", methods=["POST"])
 def add_meals():

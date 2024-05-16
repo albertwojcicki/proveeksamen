@@ -65,6 +65,48 @@ def login():
 
     return render_template("login.html", error=None)
 
+@app.route("/login_bruker_side")
+def login_bruker_side():
+    return render_template("login_bruker.html")
+
+@app.route("/login_bruker", methods = ["POST", "GET"])
+def login_bruker():
+    email = request.form.get("email")
+    password = request.form.get("password")
+    data = {
+        "email": email,
+        "password": password
+    }
+    response = requests.post("http://127.0.0.1:5020/login_bruker", json=data)
+    if response.status_code == 200:
+        return render_template("login_bruker.html")  
+    else:
+        return "Error logging in user"  
+    return render_template("login_bruker.html")
+
+@app.route("/registrer_bruker", methods=["POST", "GET"])
+def registrer_bruker():
+  if request.method == "POST":
+        email = request.form.get("email")
+        password = request.form.get("password")
+        data = {
+            "email": email,
+            "password": password
+        }
+        response = requests.post("http://127.0.0.1:5020/registrer_bruker", json=data)  
+        if response.status_code == 200:
+            return "User successfully registered!"  
+        else:
+            return "Error registering user"  
+  else:
+    return "Method not allowed"
+
+
+
+@app.route("/registrer_bruker_side")
+def registrer_bruker_side():
+    return render_template("registrer_bruker_side.html")
+
 
 @app.route("/admin/<username>")
 def admin(username):

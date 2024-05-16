@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+
+<form action="{{ url_for('login_bruker')}}" method="post">
+    <input type="text" name="email">
+    <input type="password" name="password">
+    <input type="submit">
+</form>
+
+<p>Ikke en bruker? Registrer deg <a href="/registrer_bruker_side">her</a></p>
+{{error}}
+
+{% endblock %}
