@@ -116,7 +116,7 @@ def update_quantity():
     else:
         return jsonify({"error": "User not found"}), 404
     
-@app.route("/get_handlekurv")
+@app.route("/get_handlekurv", methods=["GET"])
 def get_handlekurv():
     email = request.json.get('email')
     cur.execute("SELECT user_id FROM customers WHERE email = ?", (email,))
