@@ -1,4 +1,22 @@
 {% extends "base.html" %}
 {% block content %}
-handlekurv
+<h1>Handlekurv</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Meal ID</th>
+            <th>Number of Meals</th>
+           
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in basket_data %}
+        <tr>
+            <td>{{ basket_data[0] }}</td>
+            <td>{{ row.number_of_meals }}</td>
+            
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock %}

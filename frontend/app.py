@@ -69,12 +69,26 @@ def add_to_basket(meal_id):
         print(response)
         
         if response.status_code == 200:
-            return jsonify({"message": "Meal added to basket successfully"}), 200
+            return redirect(url_for("handlekurv"))
         else:
             return jsonify({"error": "Error adding meal to basket"}), 500
     else:
         return jsonify({"error": "Method not allowed"}), 405
     
+
+@app.route("/handlekurv")
+def handlekurv():
+    email = session.get('email')
+    if email:
+        response = requests.get("http://127.0.0.1:5020/get_handlekurv", json={"email": email})
+        if response.status_code == 200:
+            basket_data = response.json()
+            print(basket_data)
+            return render_template("handlekurv.html", basket_data=basket_data)
+        else:
+            return "Error fetching basket data"
+    else:
+        return redirect(url_for('login_bruker_side'))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():

@@ -73,6 +73,20 @@ def add_to_basket():
         return jsonify({"message": "Meal added to basket successfully"}), 200
     else:
         return jsonify({"error": "User not found"}), 404
+    
+@app.route("/get_handlekurv")
+def handlekurv():
+    email = request.json.get('email')
+    cur.execute("SELECT user_id FROM customers WHERE email = ?", (email,))
+    user = cur.fetchone()
+    
+    if user:
+        user_id = user[0]
+        cur.execute("SELECT * FROM basket WHERE user_id = ?", (user_id,))
+        basket_data = cur.fetchall()
+        return jsonify(basket_data), 200
+    else:
+        return jsonify({"error": "User not found"}), 404
 
 @app.route("/login_bruker", methods=["POST", "GET"])
 def login_bruker():
