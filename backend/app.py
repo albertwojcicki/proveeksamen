@@ -56,6 +56,13 @@ def registrer_bruker():
     con.commit()
     return  "succesfully registered user"
 
+@app.route("/delete_basket", methods=["POST", "GET"])
+def delete_basket():
+    meal_id = request.get_json()["meal_id"]
+    cur.execute("DELETE FROM basket WHERE meal_id = ?", (meal_id))
+    con.commit()
+    return "deleted the basket "
+
 @app.route("/add_to_basket", methods=["POST"])
 def add_to_basket():
     data = request.json
@@ -67,17 +74,45 @@ def add_to_basket():
     cur.execute("SELECT user_id FROM customers WHERE email = ?", (email,))
     user = cur.fetchone()
     
-    # Fetch meal name from the database
-    cur.execute("SELECT meal_name FROM meals WHERE meal_id = ?", (meal_id,))
-    meal_name_result = cur.fetchone()
-
     if user:
         user_id = user[0]  # Extract user ID from the tuple
-        meal_name = meal_name_result[0]  # Extract meal name from the tuple
-        cur.execute("INSERT INTO basket (user_id, meal_id, meal_name, number_of_meals) VALUES (?, ?, ?, ?)", (user_id, meal_id, meal_name, quantity))
+        cur.execute("SELECT meal_name FROM meals WHERE meal_id = ?", (meal_id,))
+        meal_name_result = cur.fetchone()  # Use fetchone instead of fetchall
+        print(meal_name_result)
+        cur.execute("SELECT meal_id, number_of_meals FROM basket WHERE user_id = ? AND meal_id = ?", (user_id, meal_id))
+        existing_meal = cur.fetchone()
+        if meal_name_result:
+            meal_name = meal_name_result[0]  # Extract meal name from the tuple
+        else:
+            return jsonify({"error": "Meal not found"}), 404
+        if existing_meal:
+            # If the meal exists, update the quantity
+            basket_id, existing_quantity = existing_meal
+            new_quantity = existing_quantity + quantity
+            cur.execute("UPDATE basket SET number_of_meals = ? WHERE meal_id = ?", (new_quantity, basket_id))
+        else:
+            # If the meal does not exist, insert a new row
+            cur.execute("INSERT INTO basket (user_id, meal_name, meal_id, number_of_meals) VALUES (?, ?, ?, ?)", (user_id, meal_name, meal_id, quantity))
+
         con.commit()
-        print(email, meal_id, quantity, meal_name)
         return jsonify({"message": "Meal added to basket successfully"}), 200
+    else:
+        return jsonify({"error": "User not found"}), 404
+    
+@app.route("/update_quantity/", methods=["POST"])
+def update_quantity():
+    data = request.json
+    email = data.get('email')
+    meal_id = data.get('meal_id')
+    new_quantity = data.get('quantity')
+
+    cur.execute("SELECT user_id FROM customers WHERE email = ?", (email,))
+    user = cur.fetchone()
+    if user:
+        user_id = user[0]
+        cur.execute("UPDATE basket SET number_of_meals = ? WHERE user_id = ? AND meal_id = ?", (new_quantity, user_id, meal_id))
+        con.commit()
+        return jsonify({"message": "Quantity updated successfully"}), 200
     else:
         return jsonify({"error": "User not found"}), 404
     
@@ -89,7 +124,7 @@ def get_handlekurv():
     
     if user:
         user_id = user[0]
-        cur.execute("SELECT user_id, number_of_meals, bought, purchase_time, meal_name FROM basket WHERE user_id = ?", (user_id,))
+        cur.execute("SELECT user_id, meal_id, number_of_meals, bought, purchase_time, meal_name FROM basket WHERE user_id  = ? AND bought = 0  ", (user_id,))
         basket_data = cur.fetchall()
         # cur.execute("SELECT meal_id FROM basket WHERE ")
         return jsonify(basket_data), 200

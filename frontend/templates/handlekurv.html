@@ -1,20 +1,33 @@
 {% extends "base.html" %}
 {% block content %}
 <h1>Handlekurv</h1>
+<a href="/">Hjemsiden</a>
 <table class="table">
     <thead>
         <tr>
             <th>Meal Name</th>
             <th>Number of Meals</th>
-           
+            <th>Update</th>
         </tr>
     </thead>
     <tbody>
         {% for row in basket_data %}
         <tr>
-            <td>{{ basket_data[1][4] }}</td>
-            <td>{{ basket_data[0][1] }}</td>
-            
+            <td>{{ row[5] }}</td>
+            <td> {{ row[2] }}</td>
+            <td> id {{ row[1] }}</td>
+            <td>
+                <form action="{{ url_for('update_quantity', meal_id=row[1]) }}" method="post">
+                    <input type="hidden" name="basket_id" value="{{ row[0] }}">
+                    <input type="number" name="quantity" value="{{ row[1] }}" min="1">
+                    <input type="submit" value="Update">
+                </form>
+            </td>
+            <td>
+                <form action="{{ url_for('delete_basket', meal_id = row[1]) }}" method="post">
+                    <input type="submit">
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </tbody>

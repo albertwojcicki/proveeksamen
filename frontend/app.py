@@ -53,7 +53,6 @@ def restaurants(restaurant_id):
 def add_to_basket(meal_id):
     if session['email'] is None:
         return jsonify({"error": "User not logged in"}), 401
-    
     if request.method == "POST":
         quantity = int(request.form.get("quantity", 1))  # Get the quantity of meals (default to 1 if not provided)
         print("hello world")
@@ -63,8 +62,6 @@ def add_to_basket(meal_id):
             "meal_id": meal_id,
             "quantity": quantity
         }
-        
-        # Send a JSON request to the backend Flask app
         response = requests.post("http://127.0.0.1:5020/add_to_basket", json=data)
         print(response)
         
@@ -89,9 +86,32 @@ def handlekurv():
             return "Error fetching basket data"
     else:
         return redirect(url_for('login_bruker_side'))
+    
+@app.route("/delete_basket/<meal_id>", methods = ["POST", "GET"])
+def delete_basket(meal_id):
+    requests.post("http://127.0.0.1:5020/delete_basket", json={"meal_id": meal_id})
+    return redirect(url_for('handlekurv'))
 
-
-
+@app.route("/update_quantity/<meal_id>", methods=["POST"])
+def update_quantity(meal_id):
+    if session['email'] is None:
+        return jsonify({"error": "User not logged in"}), 401
+    
+    if request.method == "POST":
+        new_quantity = int(request.form.get("quantity", 1))
+        data = {
+            "email": session['email'],
+            "meal_id": meal_id,
+            "quantity": new_quantity
+        }
+        response = requests.post("http://127.0.0.1:5020/update_quantity", json=data)
+        
+        if response.status_code == 200:
+            return redirect(url_for("handlekurv"))
+        else:
+            return jsonify({"error": "Error updating quantity"}), 500
+    else:
+        return jsonify({"error": "Method not allowed"}), 405
 
 
 @app.route("/login", methods=["GET", "POST"])

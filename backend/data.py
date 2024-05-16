@@ -38,6 +38,7 @@ cur.execute("""CREATE TABLE IF NOT EXISTS basket (
                 meal_name TEXT, 
                 number_of_meals INTEGER,
                 bought INTEGER DEFAULT 0,
+                meal_price INTEGER,
             purchase_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES customers(user_id)
             );""")
