@@ -35,6 +35,7 @@ con.commit()
 cur.execute("""CREATE TABLE IF NOT EXISTS basket (
                 user_id INTEGER, 
                 meal_id INTEGER,
+                meal_name TEXT, 
                 number_of_meals INTEGER,
                 bought INTEGER DEFAULT 0,
             purchase_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

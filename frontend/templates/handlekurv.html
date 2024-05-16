@@ -4,7 +4,7 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Meal ID</th>
+            <th>Meal Name</th>
             <th>Number of Meals</th>
            
         </tr>
@@ -12,8 +12,8 @@
     <tbody>
         {% for row in basket_data %}
         <tr>
-            <td>{{ basket_data[0] }}</td>
-            <td>{{ row.number_of_meals }}</td>
+            <td>{{ basket_data[1][4] }}</td>
+            <td>{{ basket_data[0][1] }}</td>
             
         </tr>
         {% endfor %}

@@ -62,28 +62,36 @@ def add_to_basket():
     email = data.get('email')
     meal_id = data.get('meal_id')
     quantity = data.get('quantity')
-    print("email: " + email)
+    
+    # Fetch user ID from the database
     cur.execute("SELECT user_id FROM customers WHERE email = ?", (email,))
     user = cur.fetchone()
+    
+    # Fetch meal name from the database
+    cur.execute("SELECT meal_name FROM meals WHERE meal_id = ?", (meal_id,))
+    meal_name_result = cur.fetchone()
+
     if user:
         user_id = user[0]  # Extract user ID from the tuple
-        cur.execute("INSERT INTO basket (user_id, meal_id, number_of_meals) VALUES (?, ?, ?)", (user_id, meal_id, quantity))
+        meal_name = meal_name_result[0]  # Extract meal name from the tuple
+        cur.execute("INSERT INTO basket (user_id, meal_id, meal_name, number_of_meals) VALUES (?, ?, ?, ?)", (user_id, meal_id, meal_name, quantity))
         con.commit()
-        print(email, meal_id, quantity)
+        print(email, meal_id, quantity, meal_name)
         return jsonify({"message": "Meal added to basket successfully"}), 200
     else:
         return jsonify({"error": "User not found"}), 404
     
 @app.route("/get_handlekurv")
-def handlekurv():
+def get_handlekurv():
     email = request.json.get('email')
     cur.execute("SELECT user_id FROM customers WHERE email = ?", (email,))
     user = cur.fetchone()
     
     if user:
         user_id = user[0]
-        cur.execute("SELECT * FROM basket WHERE user_id = ?", (user_id,))
+        cur.execute("SELECT user_id, number_of_meals, bought, purchase_time, meal_name FROM basket WHERE user_id = ?", (user_id,))
         basket_data = cur.fetchall()
+        # cur.execute("SELECT meal_id FROM basket WHERE ")
         return jsonify(basket_data), 200
     else:
         return jsonify({"error": "User not found"}), 404
