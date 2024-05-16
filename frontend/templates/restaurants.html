@@ -3,16 +3,13 @@
 <a href="/">Hjemside</a>
 
 
-<div class="div-restaurants">
-    {% for i in restaurants %}
-    <div class="div-each-restaurant">
-        <p class="restaurant-name">{{ i.restaurant_name }}</p>
-        <img src="http://127.0.0.1:5020/get_image/{{ i.restaurant_image }}" class="restaurant-images" alt="Image of {{ i.restaurant_name }}">
-        <form action="{{ url_for('restaurants', restaurant_id=i.restaurant_id)}}" method="post">
-            <input type="submit" value="View Restaurant" class="view-button">
-        </form>
-
-    </div>
-    {% endfor %}
-</div>
+<div class="div-meal-container">
+    {% for meal in restaurant_data %}
+    <div class="div-meal">
+        <p>Navn: {{ meal.meal_name }}</p>
+        <p>ID: {{ meal.restaurant_id }}</p>
+        <p>Pris: {{ meal.meal_price }}</p>
+        <p>Beskrivelse: {{ meal.meal_description }}</p>
+        <img class="meny-bilde" src="http://127.0.0.1:5020/get_image_meal/{{meal.meal_image}}" alt="bilde av {{meal.meal_image}}">
+        {% endfor %}
 {% endblock %}

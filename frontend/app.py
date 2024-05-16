@@ -31,10 +31,7 @@ def index():
         return "Error fetching restaurants from the backend"
     
 @app.route("/restaurants/<restaurant_id>", methods=["GET", "POST"])
-
 def restaurants(restaurant_id):
-    if session.get("username") == "None":
-       return redirect("/login")
     if request.method == "POST":
         response = requests.post("http://127.0.0.1:5020/get_restaurant_data", json={"restaurant_id": restaurant_id})
         if response.status_code == 200:
