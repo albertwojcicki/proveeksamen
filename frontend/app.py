@@ -78,8 +78,12 @@ def login_bruker():
         "password": password
     }
     response = requests.post("http://127.0.0.1:5020/login_bruker", json=data)
-
-    return redirect(url_for("index"))
+     
+    if response.status_code == 200:
+            return redirect(url_for("index"))  # Redirect to the index page after successful login
+    else:
+            # The email or password is incorrect
+        return "Invalid email or password"
 
 @app.route("/registrer_bruker", methods=["POST", "GET"])
 def registrer_bruker():
@@ -92,7 +96,7 @@ def registrer_bruker():
         }
         response = requests.post("http://127.0.0.1:5020/registrer_bruker", json=data)  
         if response.status_code == 200:
-            return "User successfully registered!"  
+            return redirect(url_for("login_bruker_side"))
         else:
             return "Error registering user"  
   else:
