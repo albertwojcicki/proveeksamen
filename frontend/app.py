@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session, redirect, json, url_for
+from flask import Flask, render_template, request, session, redirect, json, url_for, jsonify
 import sqlite3
 import requests
 
@@ -36,7 +36,7 @@ def index():
 def restaurants(restaurant_id):
     if request.method == "POST":
         # Check if the user is logged in
-        if session['user_id'] is None:
+        if session['email'] is None:
             return redirect(url_for('login_bruker_side'))  # Redirect to login page if user is not logged in
         
         response = requests.post("http://127.0.0.1:5020/get_restaurant_data", json={"restaurant_id": restaurant_id})
@@ -49,10 +49,31 @@ def restaurants(restaurant_id):
         return "Method not allowed", 405
 
 
-@app.route("/add_to_basket/<meal_id>", methods=["POST", "GET"])
+@app.route("/add_to_basket/<meal_id>", methods=["POST"])
 def add_to_basket(meal_id):
-    if session['user_id'] is None:
-        return redirect(url_for('login_bruker_side')) 
+    if session['email'] is None:
+        return jsonify({"error": "User not logged in"}), 401
+    
+    if request.method == "POST":
+        quantity = int(request.form.get("quantity", 1))  # Get the quantity of meals (default to 1 if not provided)
+        print("hello world")
+        # Prepare the data to send to the backend
+        data = {
+            "email": session['email'],
+            "meal_id": meal_id,
+            "quantity": quantity
+        }
+        
+        # Send a JSON request to the backend Flask app
+        response = requests.post("http://127.0.0.1:5020/add_to_basket", json=data)
+        print(response)
+        
+        if response.status_code == 200:
+            return jsonify({"message": "Meal added to basket successfully"}), 200
+        else:
+            return jsonify({"error": "Error adding meal to basket"}), 500
+    else:
+        return jsonify({"error": "Method not allowed"}), 405
     
 
 @app.route("/login", methods=["GET", "POST"])

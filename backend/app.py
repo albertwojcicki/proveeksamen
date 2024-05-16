@@ -56,6 +56,23 @@ def registrer_bruker():
     con.commit()
     return  "succesfully registered user"
 
+@app.route("/add_to_basket", methods=["POST"])
+def add_to_basket():
+    data = request.json
+    email = data.get('email')
+    meal_id = data.get('meal_id')
+    quantity = data.get('quantity')
+    print("email: " + email)
+    cur.execute("SELECT user_id FROM customers WHERE email = ?", (email,))
+    user = cur.fetchone()
+    if user:
+        user_id = user[0]  # Extract user ID from the tuple
+        cur.execute("INSERT INTO basket (user_id, meal_id, number_of_meals) VALUES (?, ?, ?)", (user_id, meal_id, quantity))
+        con.commit()
+        print(email, meal_id, quantity)
+        return jsonify({"message": "Meal added to basket successfully"}), 200
+    else:
+        return jsonify({"error": "User not found"}), 404
 
 @app.route("/login_bruker", methods=["POST", "GET"])
 def login_bruker():
