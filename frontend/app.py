@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, json, url_for, jsonify
 import sqlite3
 import requests
-
+from flask_cors import CORS
 
 app = Flask(__name__)
 app.config["SESSION_PERMANENT"] = False
@@ -10,18 +10,20 @@ navn = "Gjøvik restauranter"
 app.secret_key = 'your_secret_key'
 appHasRunBefore:bool = False
 
-   
+CORS(app)
 @app.before_request
 def check_login():
     global appHasRunBefore
     if not appHasRunBefore:
         session["username"] = "None"
+        session["email"] = "None"
         appHasRunBefore = True
+    if 'username' not in session:
+        session['username'] = "None"
+    if 'email' not in session:
+        session['email'] = "None"
     if session.get("username") != "None":
         print("logget inn", session.get("username"))
-    if 'user_id' not in session:
-        session['user_id'] = None
-        
    
 
 @app.route("/")
@@ -37,8 +39,8 @@ def index():
 def restaurants(restaurant_id):
     if request.method == "POST":
         # Check if the user is logged in
-        if session['email'] is None:
-            return redirect(url_for('login_bruker_side'))  # Redirect to login page if user is not logged in
+        if session['username'] is None:
+            return redirect(url_for('login'))  # Redirect to login page if user is not logged in
         
         response = requests.post("http://127.0.0.1:5020/get_restaurant_data", json={"restaurant_id": restaurant_id})
         if response.status_code == 200:

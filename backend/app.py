@@ -5,10 +5,11 @@ import sqlite3
 import os
 from werkzeug.utils import secure_filename
 from datetime import datetime
+from flask_cors import CORS
 workingdir = os.getcwd()
 
-
 app = Flask(__name__)
+CORS(app)
 # BYTT PATH PÅ DATABASEN    
 con = sqlite3.connect("database.db", check_same_thread=False)
 cur = con.cursor()
@@ -34,7 +35,7 @@ def get_image(image_name):
 
 @app.route('/get_image_meal/<image_name>', methods = ["GET"])
 def get_image_meal(image_name):
-    return send_from_directory('C:\\wamp64\\www\\proveeksamen\\backend\\static\\bilder\\',  image_name)
+    return send_from_directory('C:\\Users\\alber\\Documents\\GitHub\\proveeksamen\\backend\\static\\bilder',  image_name)
 
 @app.route('/post_image/<meal_id>/', methods=['POST'])
 def upload_image(meal_id):
@@ -59,7 +60,7 @@ def registrer_bruker():
 @app.route("/delete_basket", methods=["POST", "GET"])
 def delete_basket():
     meal_id = request.get_json()["meal_id"]
-    cur.execute("DELETE FROM basket WHERE meal_id = ?", (meal_id))
+    cur.execute("DELETE FROM basket WHERE meal_id = ?", (meal_id,))
     con.commit()
     return "deleted the basket "
 
@@ -79,12 +80,16 @@ def add_to_basket():
         cur.execute("SELECT meal_name FROM meals WHERE meal_id = ?", (meal_id,))
         meal_name_result = cur.fetchone()  # Use fetchone instead of fetchall
         print(meal_name_result)
+        cur.execute("SELECT meal_price FROM meals WHERE meal_id = ?", (meal_id,))
+        meal_price_result = cur.fetchone()
+        meal_price = meal_price_result[0]
         cur.execute("SELECT meal_id, number_of_meals FROM basket WHERE user_id = ? AND meal_id = ?", (user_id, meal_id))
         existing_meal = cur.fetchone()
         if meal_name_result:
             meal_name = meal_name_result[0]  # Extract meal name from the tuple
         else:
             return jsonify({"error": "Meal not found"}), 404
+        
         if existing_meal:
             # If the meal exists, update the quantity
             basket_id, existing_quantity = existing_meal
@@ -92,7 +97,7 @@ def add_to_basket():
             cur.execute("UPDATE basket SET number_of_meals = ? WHERE meal_id = ?", (new_quantity, basket_id))
         else:
             # If the meal does not exist, insert a new row
-            cur.execute("INSERT INTO basket (user_id, meal_name, meal_id, number_of_meals) VALUES (?, ?, ?, ?)", (user_id, meal_name, meal_id, quantity))
+            cur.execute("INSERT INTO basket (user_id, meal_name, meal_id, number_of_meals, meal_price) VALUES (?, ?, ?, ?, ?)", (user_id, meal_name, meal_id, quantity, meal_price))
 
         con.commit()
         return jsonify({"message": "Meal added to basket successfully"}), 200
@@ -124,7 +129,7 @@ def get_handlekurv():
     
     if user:
         user_id = user[0]
-        cur.execute("SELECT user_id, meal_id, number_of_meals, bought, purchase_time, meal_name FROM basket WHERE user_id  = ? AND bought = 0  ", (user_id,))
+        cur.execute("SELECT user_id, meal_id, number_of_meals, bought, purchase_time, meal_name, meal_price FROM basket WHERE user_id = ? AND bought = 0", (user_id,))
         basket_data = cur.fetchall()
         # cur.execute("SELECT meal_id FROM basket WHERE ")
         return jsonify(basket_data), 200
@@ -218,7 +223,8 @@ def edit_meal():
             "meal_id": row[0],
             "meal_name": row[2],
             "meal_price": row[3],
-            "meal_description": row[4]
+            "meal_description": row[4],
+            "meal_image": row[5]
         }
         mealsList.append(meals)
     return jsonify(mealsList)
@@ -228,15 +234,19 @@ def get_data_edit():
     meal_id = request.get_json()["meal_id"]
     cur.execute("SELECT * FROM meals WHERE meal_id = ?", (meal_id,))
     data = cur.fetchall()
+    print(data)
     mealsList = []
     for row in data:
         meals = {
             "meal_id": row[0],
+            "restaurant_id": row[1],  
             "meal_name": row[2],
             "meal_price": row[3],
-            "meal_description": row[4]
+            "meal_description": row[4],
+            "meal_image": row[5]
         }
         mealsList.append(meals)
+    print(mealsList)
     return jsonify(mealsList)
 
 @app.route("/update_meal/<meal_id>", methods=["GET","POST"])

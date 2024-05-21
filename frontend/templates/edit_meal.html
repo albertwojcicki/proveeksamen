@@ -9,7 +9,7 @@
             <li class="meal-name">{{ meal.meal_name }}</li>
             <li class="meal-price">{{ meal.meal_price }}</li>
             <li class="meal-description">{{ meal.meal_description }}</li>
-            <img class="meny-bilde" src="http://127.0.0.1:5020/get_image_meal/{{meal.meal_image}}" alt="bilde av {{meal.meal_image}}">
+            <img class="meal-image" src="http://127.0.0.1:5020/get_image_meal/{{meal.meal_image}}" alt="bilde av {{meal.meal_image}}">
             <form action="{{ url_for('edit_meals', meal_id = meal.meal_id )}}" method="post">
                 <input type="submit" value="Endre" class="edit-button">
             </form>

@@ -64,7 +64,9 @@ header {
     width: 15%;
     display: flex;
     justify-content: space-evenly;
-    height: 100px;
+    /* height: 100px; */
+    flex-direction: column;
+    
 }
 
 .div-edit-container {
